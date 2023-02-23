@@ -10,9 +10,11 @@ import {
   Typography,
 } from '@mui/material';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 export const Navbar = () => {
+  const { pathname } = useRouter();
   return (
     <AppBar>
       <Toolbar>
@@ -24,19 +26,29 @@ export const Navbar = () => {
         </NextLink>
         <Box flex={1} />
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <NextLink href="/category" passHref legacyBehavior>
+          <NextLink href="/category/men" passHref legacyBehavior>
             <Link>
-              <Button>Men</Button>
+              <Button color={pathname === '/category/men' ? 'primary' : 'info'}>
+                Men
+              </Button>
             </Link>
           </NextLink>
-          <NextLink href="/category" passHref legacyBehavior>
+          <NextLink href="/category/women" passHref legacyBehavior>
             <Link>
-              <Button>Women</Button>
+              <Button
+                color={pathname === '/category/women' ? 'primary' : 'info'}
+              >
+                Women
+              </Button>
             </Link>
           </NextLink>
-          <NextLink href="/category" passHref legacyBehavior>
+          <NextLink href="/category/kids" passHref legacyBehavior>
             <Link>
-              <Button>Kids</Button>
+              <Button
+                color={pathname === '/category/kids' ? 'primary' : 'info'}
+              >
+                Kids
+              </Button>
             </Link>
           </NextLink>
         </Box>

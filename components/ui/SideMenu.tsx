@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   IconButton,
@@ -23,11 +24,22 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from '@mui/icons-material';
+import { useContext } from 'react';
+import { UiContext } from '@/context';
+import { useRouter } from 'next/router';
 
 export const SideMenu = () => {
+  const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
+  const router = useRouter();
+  const navigateTo = (url: string) => {
+    toggleSideMenu();
+    router.push(url);
+  };
+
   return (
     <Drawer
-      open={false}
+      onClose={toggleSideMenu}
+      open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
     >
@@ -47,77 +59,83 @@ export const SideMenu = () => {
             />
           </ListItem>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <AccountCircleOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Perfil'} />
+            <ListItemText primary={'Profile'} />
           </ListItem>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <ConfirmationNumberOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Mis Ordenes'} />
+            <ListItemText primary={'My Orders'} />
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItem sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <MaleOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Hombres'} />
+            <Button onClick={() => navigateTo('/category/men')}>
+              <ListItemText primary={'Men'} />
+            </Button>
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItem sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <FemaleOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Mujeres'} />
+            <Button onClick={() => navigateTo('/category/women')}>
+              <ListItemText primary={'Women'} />
+            </Button>
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItem sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <EscalatorWarningOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Niños'} />
+            <Button onClick={() => navigateTo('/category/kids')}>
+              <ListItemText primary={'Kids'} />
+            </Button>
           </ListItem>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <VpnKeyOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Ingresar'} />
+            <ListItemText primary={'Sign in'} />
           </ListItem>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <LoginOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Salir'} />
+            <ListItemText primary={'Sign out'} />
           </ListItem>
 
           {/* Admin */}
           <Divider />
           <ListSubheader>Admin Panel</ListSubheader>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <CategoryOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Productos'} />
+            <ListItemText primary={'Products'} />
           </ListItem>
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <ConfirmationNumberOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Ordenes'} />
+            <ListItemText primary={'Orders'} />
           </ListItem>
 
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <AdminPanelSettings />
             </ListItemIcon>
-            <ListItemText primary={'Usuarios'} />
+            <ListItemText primary={'Users'} />
           </ListItem>
         </List>
       </Box>

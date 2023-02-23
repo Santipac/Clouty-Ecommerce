@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme } from '@/themes';
 import { SWRConfig } from 'swr';
+import { UiProvider } from '@/context';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
@@ -11,10 +12,12 @@ export default function App({ Component, pageProps }: AppProps) {
           fetch(resource, init).then(res => res.json()),
       }}
     >
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UiProvider>
+        <ThemeProvider theme={lightTheme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UiProvider>
     </SWRConfig>
   );
 }

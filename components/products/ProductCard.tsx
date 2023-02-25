@@ -31,7 +31,12 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       sm={4}
     >
       <Card>
-        <NextLink href="/product/slug" passHref legacyBehavior prefetch={false}>
+        <NextLink
+          href={`/product/${product.slug}`}
+          passHref
+          legacyBehavior
+          prefetch={false}
+        >
           <Link>
             <CardActionArea>
               <CardMedia

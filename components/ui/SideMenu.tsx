@@ -24,13 +24,21 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from '@mui/icons-material';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UiContext } from '@/context';
 import { useRouter } from 'next/router';
 
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
+  const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
+
+  const onSearchTerm = () => {
+    if (searchTerm.length === 0) return;
+
+    navigateTo(`/search/${searchTerm}`);
+  };
+
   const navigateTo = (url: string) => {
     toggleSideMenu();
     router.push(url);
@@ -47,11 +55,15 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus
               type="text"
+              value={searchTerm}
+              onKeyUp={e => (e.key === 'Enter' ? onSearchTerm() : null)}
+              onChange={e => setSearchTerm(e.target.value)}
               placeholder="Buscar..."
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility">
+                  <IconButton onClick={onSearchTerm}>
                     <SearchOutlined />
                   </IconButton>
                 </InputAdornment>
@@ -77,8 +89,11 @@ export const SideMenu = () => {
             <ListItemIcon>
               <MaleOutlined />
             </ListItemIcon>
-            <Button onClick={() => navigateTo('/category/men')}>
-              <ListItemText primary={'Men'} />
+            <Button
+              onClick={() => navigateTo('/category/men')}
+              sx={{ padding: 0 }}
+            >
+              <ListItemText primary={'Men'} sx={{ textAlign: 'left' }} />
             </Button>
           </ListItem>
 
@@ -86,8 +101,11 @@ export const SideMenu = () => {
             <ListItemIcon>
               <FemaleOutlined />
             </ListItemIcon>
-            <Button onClick={() => navigateTo('/category/women')}>
-              <ListItemText primary={'Women'} />
+            <Button
+              onClick={() => navigateTo('/category/women')}
+              sx={{ padding: 0 }}
+            >
+              <ListItemText primary={'Women'} sx={{ textAlign: 'left' }} />
             </Button>
           </ListItem>
 
@@ -95,8 +113,11 @@ export const SideMenu = () => {
             <ListItemIcon>
               <EscalatorWarningOutlined />
             </ListItemIcon>
-            <Button onClick={() => navigateTo('/category/kids')}>
-              <ListItemText primary={'Kids'} />
+            <Button
+              onClick={() => navigateTo('/category/kids')}
+              sx={{ padding: 0 }}
+            >
+              <ListItemText primary={'Kids'} sx={{ textAlign: 'left' }} />
             </Button>
           </ListItem>
 

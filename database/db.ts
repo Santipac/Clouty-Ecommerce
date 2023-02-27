@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
  * 2 = connecting
  * 3 = disconnecting
  */
+mongoose.set('strictQuery', false);
 const mongoConnection = {
   isConnected: 0,
 };

@@ -1,6 +1,8 @@
+import { Box } from '@mui/material';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { Navbar, SideMenu } from '../ui';
+import { Hero, Navbar, SideMenu } from '../ui';
 
 interface Props {
   title: string;
@@ -15,6 +17,7 @@ export const ShopLayout: React.FC<Props> = ({
   pageDescription,
   imageFullUrl,
 }) => {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -28,6 +31,11 @@ export const ShopLayout: React.FC<Props> = ({
         <Navbar />
       </nav>
       <SideMenu />
+      {router.pathname === '/' ? (
+        <Box py={4} px={2}>
+          <Hero />
+        </Box>
+      ) : null}
       <main
         style={{ margin: '80px auto', maxWidth: '1440px', padding: '0px 30px' }}
       >

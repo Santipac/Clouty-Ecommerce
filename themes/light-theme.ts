@@ -13,6 +13,9 @@ export const lightTheme = createTheme({
       main: '#fff',
     },
   },
+  typography: {
+    fontFamily: ['Inter', 'Roboto'].join(','),
+  },
   components: {
     MuiLink: {
       defaultProps: {

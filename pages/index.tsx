@@ -2,24 +2,63 @@ import { ShopLayout } from '@/components/layouts';
 import { ProductList } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
 import { useProducts } from '@/hooks';
-import { Typography } from '@mui/material';
-
+import { Box, Button, Link, Typography } from '@mui/material';
+import NextLink from 'next/link';
 export default function Home() {
   const { products, error, isLoading } = useProducts('/products');
 
   return (
     <ShopLayout
-      title="Teslo-Shop | Home"
+      title="P.Clothes Shop | Home"
       pageDescription="The Best Tesla's products in one place"
     >
-      <Typography variant="h1" component="h1">
-        Store
-      </Typography>
-      <Typography variant="h2" component="h2" sx={{ mb: 1 }}>
-        All Products
-      </Typography>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        sx={{ pt: 3, pb: 2 }}
+      >
+        <Typography variant="h4" component="h2" fontWeight="bold">
+          New Arrivals
+        </Typography>
+        <NextLink href="/products" passHref legacyBehavior>
+          <Link>
+            {' '}
+            <Button color="info" size="medium" sx={{ mt: 1, mb: 2 }}>
+              View All
+            </Button>
+          </Link>
+        </NextLink>
+      </Box>
 
-      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
+      {isLoading ? (
+        <FullScreenLoading />
+      ) : (
+        <ProductList products={products.slice(0, 5)} />
+      )}
+      <Box display="flex" justifyContent="center" sx={{ mt: 16 }}>
+        <Typography
+          variant="h5"
+          component="h2"
+          textAlign="center"
+          maxWidth="55%"
+          lineHeight={2}
+        >
+          P.Clothes is a clothing ecommerce developed by{' '}
+          <strong>
+            <NextLink
+              href={'https://santiagopacini.vercel.app/'}
+              target="_blank"
+              passHref
+              legacyBehavior
+            >
+              <Link color="secondary">Santiago Pacini</Link>
+            </NextLink>
+          </strong>
+          , this store <strong>is not real</strong> is just a personal project
+          that has a lot of effort, passion and long hours of coding.
+        </Typography>
+      </Box>
     </ShopLayout>
   );
 }

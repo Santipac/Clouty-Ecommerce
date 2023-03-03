@@ -1,4 +1,4 @@
-# Next.js Teslo Shop
+# Next.js P.Clothes Shop
 
 Para correr localmente, se necesita la base de datos.
 

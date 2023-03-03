@@ -1,5 +1,6 @@
-import { CardList, OrderSummary } from '@/components/cart';
+import { CartList, OrderSummary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
+import { CartContext } from '@/context';
 import {
   Box,
   Button,
@@ -9,18 +10,23 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const CartPage = () => {
+  const { numberOfItems } = useContext(CartContext);
+
   return (
-    <ShopLayout title={'Cart - 3'} pageDescription={'Shopping Cart of Store'}>
+    <ShopLayout
+      title={`Cart - ${numberOfItems}`}
+      pageDescription={'Shopping Cart of Store'}
+    >
       <Typography variant="h1" component="h1">
         Cart
       </Typography>
       <Grid container>
         <Grid item xs={12} sm={7}>
           {/*  CardList */}
-          <CardList editable />
+          <CartList editable />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">

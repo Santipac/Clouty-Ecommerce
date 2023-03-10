@@ -1,3 +1,4 @@
+export * from './AdminActionsOnSideBar';
 export * from './FullScreenLoading';
 export * from './Hero';
 export * from './ItemCounter';

@@ -41,7 +41,8 @@ const RegisterPage = () => {
       setTimeout(() => setShowError(false), 5000);
       return;
     }
-    router.replace('/');
+    const destination = router.query.page?.toString() || '/';
+    router.replace(destination);
   };
   return (
     <AuthLayout title="Register">
@@ -115,7 +116,15 @@ const RegisterPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href="/auth/login" passHref legacyBehavior>
+              <NextLink
+                href={
+                  router.query.page
+                    ? `/auth/login?page=${router.query.page}`
+                    : '/auth/login'
+                }
+                passHref
+                legacyBehavior
+              >
                 <Link underline="always">Do you have an account?</Link>
               </NextLink>
             </Grid>

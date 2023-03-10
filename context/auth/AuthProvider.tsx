@@ -2,6 +2,7 @@ import { clothesApi } from '@/api';
 import { IUser } from '@/interfaces';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import { FC, useEffect, useReducer } from 'react';
 import { authReducer, AuthContext } from './';
 
@@ -21,12 +22,13 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: FC<Children> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
-
+  const router = useRouter();
   useEffect(() => {
     checkToken();
   }, []);
 
   const checkToken = async () => {
+    if (!Cookies.get('token')) return;
     try {
       const { data } = await clothesApi.get('/user/validate-token');
       const { token, user } = data;
@@ -53,6 +55,12 @@ export const AuthProvider: FC<Children> = ({ children }) => {
     } catch (error) {
       return false;
     }
+  };
+
+  const logoutUser = () => {
+    Cookies.remove('token');
+    Cookies.remove('cart');
+    router.reload();
   };
 
   const registerUser = async (
@@ -82,7 +90,9 @@ export const AuthProvider: FC<Children> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, loginUser, registerUser }}>
+    <AuthContext.Provider
+      value={{ ...state, loginUser, registerUser, logoutUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

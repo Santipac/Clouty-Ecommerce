@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import NextLink from 'next/link';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import {
@@ -14,6 +14,8 @@ import { clothesApi } from '@/api';
 import { useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
 import { validations } from '@/utils';
+import { AuthContext } from '@/context';
+import { useRouter } from 'next/router';
 type FormData = {
   name: string;
   email: string;
@@ -27,20 +29,19 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
+  const { registerUser } = useContext(AuthContext);
   const onRegisterUser = async ({ email, password, name }: FormData) => {
     setShowError(false);
-    try {
-      const { data } = await clothesApi.post('/user/register', {
-        name,
-        email,
-        password,
-      });
-      console.log(data);
-    } catch (error) {
+    const { hasError, message } = await registerUser(name, email, password);
+    if (hasError) {
       setShowError(true);
+      setErrorMessage(message!);
       setTimeout(() => setShowError(false), 5000);
+      return;
     }
+    router.replace('/');
   };
   return (
     <AuthLayout title="Register">

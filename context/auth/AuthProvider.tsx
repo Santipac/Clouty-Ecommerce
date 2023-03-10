@@ -1,7 +1,8 @@
 import { clothesApi } from '@/api';
 import { IUser } from '@/interfaces';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-import { FC, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import { authReducer, AuthContext } from './';
 
 export interface AuthState {
@@ -21,6 +22,21 @@ const AUTH_INITIAL_STATE: AuthState = {
 export const AuthProvider: FC<Children> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const checkToken = async () => {
+    try {
+      const { data } = await clothesApi.get('/user/validate-token');
+      const { token, user } = data;
+      Cookies.set('token', token);
+      dispatch({ type: '[Auth] - Login', payload: user });
+    } catch (error) {
+      Cookies.remove('token');
+    }
+  };
+
   const loginUser = async (
     email: string,
     password: string
@@ -39,8 +55,34 @@ export const AuthProvider: FC<Children> = ({ children }) => {
     }
   };
 
+  const registerUser = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<{ hasError: boolean; message?: string }> => {
+    try {
+      const { data } = await clothesApi.post('/user/register', {
+        name,
+        email,
+        password,
+      });
+      const { token, user } = data;
+      Cookies.set('token', token);
+      dispatch({ type: '[Auth] - Login', payload: user });
+      return { hasError: false };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return { hasError: true, message: error.response?.data.message };
+      }
+      return {
+        hasError: true,
+        message: 'Could not create the user. Please try again.',
+      };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, loginUser }}>
+    <AuthContext.Provider value={{ ...state, loginUser, registerUser }}>
       {children}
     </AuthContext.Provider>
   );

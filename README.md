@@ -1,4 +1,4 @@
-# Next.js P.Clothes Shop
+# Next.js Clouty Shop
 
 Para correr localmente, se necesita la base de datos.
 

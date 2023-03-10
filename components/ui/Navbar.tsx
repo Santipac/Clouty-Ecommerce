@@ -85,7 +85,7 @@ export const Navbar = () => {
           <NextLink href="/" passHref legacyBehavior>
             <Link display="flex" alignItems="center">
               <Typography variant="h4" fontWeight="bold">
-                P.Clothes&#174;
+                Clouty&#174;
               </Typography>
             </Link>
           </NextLink>

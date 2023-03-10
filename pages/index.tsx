@@ -9,8 +9,8 @@ export default function Home() {
 
   return (
     <ShopLayout
-      title="P.Clothes Shop | Home"
-      pageDescription="The Best Tesla's products in one place"
+      title="Clouty Shop | Home"
+      pageDescription="The Best Clouty products in one place"
     >
       <Box
         display="flex"
@@ -44,7 +44,7 @@ export default function Home() {
           maxWidth="55%"
           lineHeight={2}
         >
-          P.Clothes is a clothing ecommerce developed by{' '}
+          Clouty is a clothing ecommerce developed by{' '}
           <strong>
             <NextLink
               href={'https://santiagopacini.vercel.app/'}

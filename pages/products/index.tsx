@@ -10,8 +10,8 @@ const ProductsPage = () => {
 
   return (
     <ShopLayout
-      title="P.Clothes | All Products"
-      pageDescription="All products of P.clothes for shopping"
+      title=" | All Products"
+      pageDescription="All products of Clouty for shopping"
     >
       <Typography variant="h2" component="h2" sx={{ mb: 1 }}>
         All Products

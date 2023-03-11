@@ -29,6 +29,12 @@ export const CartProvider: FC<Children> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
   useEffect(() => {
+    if (state.cart.length > 0) {
+      Cookie.set('cart', JSON.stringify(state.cart));
+    }
+  }, [state.cart]);
+
+  useEffect(() => {
     try {
       const cookiesProducts = Cookie.get('cart')
         ? JSON.parse(Cookie.get('cart')!)

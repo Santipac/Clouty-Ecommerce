@@ -1,4 +1,4 @@
-import { CardList, OrderSummary } from '@/components/cart';
+import { CartList, OrderSummary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
 import {
   Box,
@@ -22,7 +22,7 @@ const SummaryPage = () => {
       <Grid container>
         <Grid item xs={12} sm={7}>
           {/*  CardList */}
-          <CardList editable />
+          <CartList editable />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">
@@ -44,7 +44,10 @@ const SummaryPage = () => {
               <Typography>Argentina</Typography>
               <Typography>+11 8745 5684 6456</Typography>
               <Divider sx={{ my: 1 }} />
-              <Box display="flex" justifyContent="end">
+              <Box display="flex">
+                <Typography sx={{ flex: 1 }} variant="subtitle1">
+                  Cart Summary
+                </Typography>
                 <NextLink href="/cart" passHref legacyBehavior>
                   <Link underline="always" color="secondary">
                     Edit

@@ -1,5 +1,7 @@
 import { CartList, OrderSummary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
+import { CartContext } from '@/context';
+import { countries } from '@/utils';
 import {
   Box,
   Button,
@@ -11,9 +13,18 @@ import {
   Typography,
 } from '@mui/material';
 import NextLink from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const SummaryPage = () => {
+  const { shippingAddress } = useContext(CartContext);
+
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const { firstName, lastName, country, phone, city, zip, address, address2 } =
+    shippingAddress;
+
   return (
     <ShopLayout title="Order Summary" pageDescription={'Summary of the order'}>
       <Typography variant="h1" component="h1">
@@ -38,11 +49,13 @@ const SummaryPage = () => {
                   </Link>
                 </NextLink>
               </Box>
-              <Typography>Santiago Pacini</Typography>
-              <Typography>Bulnes 9239</Typography>
-              <Typography>Palermo, Capital Federal</Typography>
-              <Typography>Argentina</Typography>
-              <Typography>+11 8745 5684 6456</Typography>
+              <Typography>{`${firstName} ${lastName}`}</Typography>
+              <Typography>{`${address} - ${address2}`}</Typography>
+              <Typography>{`${city}, ${
+                countries.find(c => c.code === country)?.name
+              }`}</Typography>
+              <Typography>{zip}</Typography>
+              <Typography>{phone}</Typography>
               <Divider sx={{ my: 1 }} />
               <Box display="flex">
                 <Typography sx={{ flex: 1 }} variant="subtitle1">

@@ -10,7 +10,7 @@ export interface CartState {
   subTotal: number;
   taxes: number;
   total: number;
-  shippingAddres?: ShippingAddress;
+  shippingAddress?: ShippingAddress;
 }
 
 interface Children {
@@ -35,7 +35,7 @@ export const CART_INITIAL_STATE: CartState = {
   subTotal: 0,
   taxes: 0,
   total: 0,
-  shippingAddres: undefined,
+  shippingAddress: undefined,
 };
 
 export const CartProvider: FC<Children> = ({ children }) => {
@@ -48,8 +48,8 @@ export const CartProvider: FC<Children> = ({ children }) => {
   }, [state.cart]);
 
   useEffect(() => {
-    if (Cookie.get('firstName') === undefined) {
-      const shippingAddres = {
+    if (Cookie.get('firstName')) {
+      const shippingAddress = {
         firstName: Cookie.get('firstName') || '',
         lastName: Cookie.get('lastName') || '',
         address: Cookie.get('address') || '',
@@ -61,7 +61,7 @@ export const CartProvider: FC<Children> = ({ children }) => {
       };
       dispatch({
         type: '[Cart] - LoadAddress from cookies',
-        payload: shippingAddres,
+        payload: shippingAddress,
       });
     }
   }, []);
@@ -143,6 +143,18 @@ export const CartProvider: FC<Children> = ({ children }) => {
     dispatch({ type: '[Cart] - Remove product from cart', payload: product });
   };
 
+  const updateAddress = (address: ShippingAddress) => {
+    Cookie.set('firstName', address.firstName);
+    Cookie.set('lastName', address.lastName);
+    Cookie.set('address', address.address);
+    Cookie.set('address2', address.address2 || '');
+    Cookie.set('zip', address.zip);
+    Cookie.set('city', address.city);
+    Cookie.set('country', address.country);
+    Cookie.set('phone', address.phone);
+    dispatch({ type: '[Cart] - Update Address', payload: address });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -150,6 +162,7 @@ export const CartProvider: FC<Children> = ({ children }) => {
         addProductToCart,
         updateCartQuantity,
         removeCartProduct,
+        updateAddress,
       }}
     >
       {children}

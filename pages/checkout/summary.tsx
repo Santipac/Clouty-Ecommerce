@@ -12,16 +12,23 @@ import {
   Link,
   Typography,
 } from '@mui/material';
+import Cookies from 'js-cookie';
 import NextLink from 'next/link';
-import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect } from 'react';
 
 const SummaryPage = () => {
+  const router = useRouter();
   const { shippingAddress } = useContext(CartContext);
+  useEffect(() => {
+    if (!Cookies.get('firstName')) {
+      router.push('/checkout/address');
+    }
+  }, [router]);
 
   if (!shippingAddress) {
     return <></>;
   }
-
   const { firstName, lastName, country, phone, city, zip, address, address2 } =
     shippingAddress;
 
@@ -51,9 +58,7 @@ const SummaryPage = () => {
               </Box>
               <Typography>{`${firstName} ${lastName}`}</Typography>
               <Typography>{`${address} - ${address2}`}</Typography>
-              <Typography>{`${city}, ${
-                countries.find(c => c.code === country)?.name
-              }`}</Typography>
+              <Typography>{`${city}, ${country}`}</Typography>
               <Typography>{zip}</Typography>
               <Typography>{phone}</Typography>
               <Divider sx={{ my: 1 }} />

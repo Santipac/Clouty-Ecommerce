@@ -1,27 +1,31 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-import * as jose from 'jose';
+// TODO: Find the way to fix the middleware redirection
 
 export async function middleware(req: NextRequest) {
-  const previousPage = req.nextUrl.pathname;
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (previousPage.startsWith('/checkout')) {
-    const token = req.cookies.get('token')?.value || '';
+  if (!session) {
+    const requestedPage = req.nextUrl.pathname;
+    const loginPage = '/auth/login';
 
-    try {
-      await jose.jwtVerify(
-        token,
-        new TextEncoder().encode(process.env.JWT_SECRET_SEED)
-      );
+    // Check if we're already on the login page to avoid redirect loop
+    if (requestedPage === loginPage) {
       return NextResponse.next();
-    } catch (error) {
-      return NextResponse.redirect(
-        new URL(`/auth/login?page=${previousPage}`, req.url)
-      );
     }
+
+    const url = req.nextUrl.clone();
+    url.pathname = loginPage;
+    url.search = `p=${requestedPage}`;
+    return NextResponse.redirect(url);
   }
+
+  return NextResponse.next();
 }
 
+// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/checkout/:path*'],
+  matcher: ['/checkout/address', '/checkout/summary'],
 };

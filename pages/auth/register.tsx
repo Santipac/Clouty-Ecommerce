@@ -16,22 +16,25 @@ import { ErrorOutline } from '@mui/icons-material';
 import { validations } from '@/utils';
 import { AuthContext } from '@/context';
 import { useRouter } from 'next/router';
+import { getSession, signIn } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+
 type FormData = {
   name: string;
   email: string;
   password: string;
 };
 const RegisterPage = () => {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const router = useRouter();
   const { registerUser } = useContext(AuthContext);
+
   const onRegisterUser = async ({ email, password, name }: FormData) => {
     setShowError(false);
     const { hasError, message } = await registerUser(name, email, password);
@@ -41,9 +44,12 @@ const RegisterPage = () => {
       setTimeout(() => setShowError(false), 5000);
       return;
     }
-    const destination = router.query.page?.toString() || '/';
-    router.replace(destination);
+    await signIn('credentials', { email, password });
+
+    // const destination = router.query.page?.toString() || '/';
+    // router.replace(destination);
   };
+
   return (
     <AuthLayout title="Register">
       <form onSubmit={handleSubmit(onRegisterUser)} noValidate>
@@ -133,6 +139,27 @@ const RegisterPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const session = await getSession({ req });
+  const { page = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default RegisterPage;

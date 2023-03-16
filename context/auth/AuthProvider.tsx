@@ -1,10 +1,11 @@
-import { clothesApi } from '@/api';
-import { IUser } from '@/interfaces';
+import { FC, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useSession, signOut } from 'next-auth/react';
+import { clothesApi } from '@/api';
 import { useRouter } from 'next/router';
-import { FC, useEffect, useReducer } from 'react';
 import { authReducer, AuthContext } from './';
+import { IUser } from '@/interfaces';
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -23,6 +24,15 @@ const AUTH_INITIAL_STATE: AuthState = {
 export const AuthProvider: FC<Children> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
   const router = useRouter();
+  const { data, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      console.log({ user: data?.user });
+      dispatch({ type: '[Auth] - Login', payload: data.user as IUser });
+    }
+  }, [status, data]);
+
   useEffect(() => {
     checkToken();
   }, []);
@@ -58,9 +68,17 @@ export const AuthProvider: FC<Children> = ({ children }) => {
   };
 
   const logoutUser = () => {
-    Cookies.remove('token');
     Cookies.remove('cart');
-    router.reload();
+    Cookies.remove('firstName');
+    Cookies.remove('lastName');
+    Cookies.remove('address');
+    Cookies.remove('address2');
+    Cookies.remove('phone');
+    Cookies.remove('zip');
+    Cookies.remove('city');
+    Cookies.remove('country');
+
+    signOut();
   };
 
   const registerUser = async (

@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { GetServerSideProps } from 'next';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { countries } from '@/utils/countries';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
@@ -43,17 +43,29 @@ const getAddressFromCookies = (): FormData => {
 };
 
 const AddressPage = () => {
+  const router = useRouter();
+  const { updateAddress } = useContext(CartContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
-    defaultValues: getAddressFromCookies(),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      address: '',
+      address2: '',
+      zip: '',
+      city: '',
+      country: '',
+      phone: '',
+    },
   });
 
-  const { updateAddress } = useContext(CartContext);
-
-  const router = useRouter();
+  useEffect(() => {
+    reset(getAddressFromCookies());
+  }, [reset]);
 
   const onSubmitAddress = (data: FormData) => {
     updateAddress(data);
@@ -144,22 +156,16 @@ const AddressPage = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <TextField
-                select
+                fullWidth
                 variant="filled"
-                defaultValue={Cookies.get('country' || countries[0].code)}
+                // defaultValue={Cookies.get('country' || countries[0].code)}
                 label="Country"
                 {...register('country', {
                   required: 'This field is required',
                 })}
                 error={!!errors.country}
                 helperText={errors.country?.message}
-              >
-                {countries.map(country => (
-                  <MenuItem key={country.code} value={country.code}>
-                    {country.name}
-                  </MenuItem>
-                ))}
-              </TextField>
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>

@@ -1,21 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
-import { clothesApi } from '@/api';
+import { getSession, signIn, getProviders } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import { validations } from '@/utils';
 import { ErrorOutline } from '@mui/icons-material';
+import { FcGoogle } from 'react-icons/fc';
+import { BsGithub } from 'react-icons/bs';
 import {
   Box,
   Button,
   Chip,
+  Divider,
   Grid,
   Link,
   TextField,
   Typography,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '@/context';
-import { useRouter } from 'next/router';
 
 type FormData = {
   email: string;
@@ -30,18 +33,18 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
-  const { loginUser } = useContext(AuthContext);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-    const isValidLogin = await loginUser(email, password);
-    if (!isValidLogin) {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
-      return;
-    }
-    const destination = router.query.page?.toString() || '/';
-    router.replace(destination);
+    // const isValidLogin = await loginUser(email, password);
+    // if (!isValidLogin) {
+    //   setShowError(true);
+    //   setTimeout(() => setShowError(false), 5000);
+    //   return;
+    // }
+    // const destination = router.query.page?.toString() || '/';
+    // router.replace(destination);´
+    await signIn('credentials', { email, password });
   };
 
   return (
@@ -103,6 +106,7 @@ const LoginPage = () => {
                 Sign in
               </Button>
             </Grid>
+
             <Grid item xs={12} display="flex" justifyContent="end">
               <NextLink
                 href={
@@ -116,11 +120,60 @@ const LoginPage = () => {
                 <Link underline="always">Dont have an account?</Link>
               </NextLink>
             </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ width: '100%', mb: 2 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                className="circular-btn"
+                size="large"
+                fullWidth
+                onClick={() => signIn('google')}
+                sx={{ gap: 2, backgroundColor: '#fff7f7' }}
+              >
+                <FcGoogle size="25px" /> Sign in with Google
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                color="primary"
+                className="circular-btn"
+                size="large"
+                fullWidth
+                onClick={() => signIn('github')}
+                sx={{ gap: 2 }}
+              >
+                <BsGithub size="25px" /> Sign in with Github
+              </Button>
+            </Grid>
           </Grid>
         </Box>
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const session = await getSession({ req });
+  const { page = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default LoginPage;

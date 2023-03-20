@@ -1,7 +1,8 @@
 import { FC, useEffect, useReducer } from 'react';
 import Cookie from 'js-cookie';
 import { CartContext, cartReducer } from './';
-import { ICartProduct, ShippingAddress } from '@/interfaces';
+import { ICartProduct, IOrder, ShippingAddress } from '@/interfaces';
+import cloutyApi from '@/api/CloutyApi';
 
 export interface CartState {
   isLoaded: boolean;
@@ -16,8 +17,6 @@ export interface CartState {
 interface Children {
   children: JSX.Element | JSX.Element[];
 }
-
-
 
 export const CART_INITIAL_STATE: CartState = {
   isLoaded: false,
@@ -146,6 +145,31 @@ export const CartProvider: FC<Children> = ({ children }) => {
     dispatch({ type: '[Cart] - Update Address', payload: address });
   };
 
+  const createOrder = async () => {
+    if (!state.shippingAddress) {
+      throw new Error('Address direction does not exist');
+    }
+    const body: IOrder = {
+      orderItems: state.cart.map(p => ({
+        ...p,
+        size: p.size!,
+      })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.numberOfItems,
+      subTotal: state.subTotal,
+      taxes: state.taxes,
+      total: state.total,
+      isPaid: false,
+    };
+
+    try {
+      const { data } = await cloutyApi.post('/orders', body);
+      console.log({ data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -154,6 +178,7 @@ export const CartProvider: FC<Children> = ({ children }) => {
         updateCartQuantity,
         removeCartProduct,
         updateAddress,
+        createOrder,
       }}
     >
       {children}

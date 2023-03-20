@@ -19,7 +19,12 @@ import React, { useContext, useEffect } from 'react';
 
 const SummaryPage = () => {
   const router = useRouter();
-  const { shippingAddress } = useContext(CartContext);
+  const { shippingAddress, createOrder } = useContext(CartContext);
+
+  const onCreateOrder = () => {
+    createOrder();
+  };
+
   useEffect(() => {
     if (!Cookies.get('firstName')) {
       router.push('/checkout/address');
@@ -74,7 +79,12 @@ const SummaryPage = () => {
               </Box>
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color="secondary" className="circular-btn" fullWidth>
+                <Button
+                  color="secondary"
+                  className="circular-btn"
+                  fullWidth
+                  onClick={onCreateOrder}
+                >
                   Confirm Order
                 </Button>
               </Box>

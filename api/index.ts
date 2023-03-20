@@ -1,1 +1,1 @@
-export { default as clothesApi } from './clothesApi';
+export { default as CloutyApi } from './CloutyApi';

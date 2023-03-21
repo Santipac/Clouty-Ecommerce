@@ -3,6 +3,7 @@ import Cookie from 'js-cookie';
 import { CartContext, cartReducer } from './';
 import { ICartProduct, IOrder, ShippingAddress } from '@/interfaces';
 import cloutyApi from '@/api/CloutyApi';
+import axios from 'axios';
 
 export interface CartState {
   isLoaded: boolean;
@@ -145,7 +146,10 @@ export const CartProvider: FC<Children> = ({ children }) => {
     dispatch({ type: '[Cart] - Update Address', payload: address });
   };
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{
+    hasError: boolean;
+    message: string;
+  }> => {
     if (!state.shippingAddress) {
       throw new Error('Address direction does not exist');
     }
@@ -163,10 +167,17 @@ export const CartProvider: FC<Children> = ({ children }) => {
     };
 
     try {
-      const { data } = await cloutyApi.post('/orders', body);
-      console.log({ data });
+      const { data } = await cloutyApi.post<IOrder>('/orders', body);
+      dispatch({ type: '[Cart] - Order complete' });
+      return { hasError: false, message: data._id! };
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        return { hasError: true, message: error.response?.data.message };
+      }
+      return {
+        hasError: true,
+        message: 'Uncontrolled error, talk to the administrator',
+      };
     }
   };
 

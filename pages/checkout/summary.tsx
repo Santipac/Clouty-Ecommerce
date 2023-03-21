@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Grid,
   Link,
@@ -15,14 +16,24 @@ import {
 import Cookies from 'js-cookie';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 const SummaryPage = () => {
   const router = useRouter();
+  const [isPosting, setIsPosting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { shippingAddress, createOrder } = useContext(CartContext);
 
-  const onCreateOrder = () => {
-    createOrder();
+  const onCreateOrder = async () => {
+    setIsPosting(true);
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+    router.replace(`/orders/${message}`);
   };
 
   useEffect(() => {
@@ -78,15 +89,21 @@ const SummaryPage = () => {
                 </NextLink>
               </Box>
               <OrderSummary />
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
                 <Button
                   color="secondary"
                   className="circular-btn"
                   fullWidth
                   onClick={onCreateOrder}
+                  disabled={isPosting}
                 >
                   Confirm Order
                 </Button>
+                <Chip
+                  color="error"
+                  label={errorMessage}
+                  sx={{ display: errorMessage ? 'flex' : 'none', mt: 2 }}
+                />
               </Box>
             </CardContent>
           </Card>

@@ -77,6 +77,10 @@ export const CartProvider: FC<Children> = ({ children }) => {
   useEffect(() => {
     Cookie.set('cart', JSON.stringify(state.cart));
   }, [state.cart]);
+
+
+
+  
   useEffect(() => {
     const numberOfItems = state.cart.reduce(
       (prev, current) => current.quantity + prev,

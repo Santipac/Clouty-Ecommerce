@@ -2,7 +2,7 @@ import { FC, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useSession, signOut } from 'next-auth/react';
-import { cloutyApi } from '@/api';
+import { CloutyApi } from '@/api';
 import { useRouter } from 'next/router';
 import { authReducer, AuthContext } from './';
 import { IUser } from '@/interfaces';
@@ -28,7 +28,6 @@ export const AuthProvider: FC<Children> = ({ children }) => {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log({ user: data?.user });
       dispatch({ type: '[Auth] - Login', payload: data.user as IUser });
     }
   }, [status, data]);
@@ -40,7 +39,7 @@ export const AuthProvider: FC<Children> = ({ children }) => {
   const checkToken = async () => {
     if (!Cookies.get('token')) return;
     try {
-      const { data } = await cloutyApi.get('/user/validate-token');
+      const { data } = await CloutyApi.get('/user/validate-token');
       const { token, user } = data;
       Cookies.set('token', token);
       dispatch({ type: '[Auth] - Login', payload: user });
@@ -54,7 +53,7 @@ export const AuthProvider: FC<Children> = ({ children }) => {
     password: string
   ): Promise<boolean> => {
     try {
-      const { data } = await cloutyApi.post('/user/login', {
+      const { data } = await CloutyApi.post('/user/login', {
         email,
         password,
       });
@@ -87,7 +86,7 @@ export const AuthProvider: FC<Children> = ({ children }) => {
     password: string
   ): Promise<{ hasError: boolean; message?: string }> => {
     try {
-      const { data } = await cloutyApi.post('/user/register', {
+      const { data } = await CloutyApi.post('/user/register', {
         name,
         email,
         password,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const cloutyApi = axios.create({
+const CloutyApi = axios.create({
   baseURL: '/api',
 });
-export default cloutyApi;
+export default CloutyApi;

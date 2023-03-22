@@ -1,5 +1,5 @@
 import { CartContext } from '@/context';
-import { ICartProduct } from '@/interfaces';
+import { ICartProduct, IOrderItem } from '@/interfaces';
 import {
   Box,
   Button,
@@ -14,9 +14,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ItemCounter } from '../ui';
 
 interface Props {
-  editable: boolean;
+  editable?: boolean;
+  products?: IOrderItem[];
 }
-export const CartList: React.FC<Props> = ({ editable }) => {
+export const CartList: React.FC<Props> = ({ editable = false, products }) => {
   const { cart, updateCartQuantity, removeCartProduct } =
     useContext(CartContext);
   const [hasMounted, setHasMounted] = useState(false);
@@ -33,10 +34,12 @@ export const CartList: React.FC<Props> = ({ editable }) => {
     updateCartQuantity(product);
   };
 
+  const productsToShow = products ? products : cart;
+
   return (
     <>
       {hasMounted &&
-        cart.map(product => (
+        productsToShow.map(product => (
           <Grid
             container
             spacing={2}
@@ -72,7 +75,7 @@ export const CartList: React.FC<Props> = ({ editable }) => {
                     currentValue={product.quantity}
                     maxValue={5}
                     updatedQuantity={newValue =>
-                      onNewCartQuantityValue(product, newValue)
+                      onNewCartQuantityValue(product as ICartProduct, newValue)
                     }
                   />
                 ) : (
@@ -95,7 +98,7 @@ export const CartList: React.FC<Props> = ({ editable }) => {
                   variant="text"
                   color="secondary"
                   onClick={() => {
-                    removeCartProduct(product);
+                    removeCartProduct(product as ICartProduct);
                   }}
                 >
                   Remove

@@ -1,10 +1,17 @@
 import { CartContext } from '@/context';
+import { IOrder } from '@/interfaces';
 import { currency } from '@/utils';
 import { Grid, Typography } from '@mui/material';
 import React, { useContext } from 'react';
 
-export const OrderSummary = () => {
-  const { numberOfItems, taxes, total, subTotal } = useContext(CartContext);
+interface Props {
+  order: IOrder;
+}
+
+export const OrderSummary: React.FC<Props> = ({ order }) => {
+  const cart = useContext(CartContext);
+
+  const infoToShow = order ? order : cart;
 
   return (
     <Grid container>
@@ -12,13 +19,13 @@ export const OrderSummary = () => {
         <Typography>Products</Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{numberOfItems} item(s)</Typography>
+        <Typography>{infoToShow.numberOfItems} item(s)</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography>Subtotal</Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{currency.format(subTotal)}</Typography>
+        <Typography>{currency.format(infoToShow.subTotal)}</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography>
@@ -26,13 +33,15 @@ export const OrderSummary = () => {
         </Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{currency.format(taxes)}</Typography>
+        <Typography>{currency.format(infoToShow.taxes)}</Typography>
       </Grid>
       <Grid item xs={6} sx={{ mt: 2 }}>
         <Typography variant="subtitle1">Total:</Typography>
       </Grid>
       <Grid item xs={6} sx={{ mt: 2 }} display="flex" justifyContent="end">
-        <Typography variant="subtitle1">{currency.format(total)}</Typography>
+        <Typography variant="subtitle1">
+          {currency.format(infoToShow.total)}
+        </Typography>
       </Grid>
     </Grid>
   );

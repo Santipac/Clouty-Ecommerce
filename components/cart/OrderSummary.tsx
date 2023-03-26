@@ -5,7 +5,7 @@ import { Grid, Typography } from '@mui/material';
 import React, { useContext } from 'react';
 
 interface Props {
-  order: IOrder;
+  order?: IOrder;
 }
 
 export const OrderSummary: React.FC<Props> = ({ order }) => {

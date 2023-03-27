@@ -3,6 +3,7 @@ import {
   CategoryOutlined,
   ConfirmationNumberOutlined,
   AdminPanelSettings,
+  DashboardOutlined,
 } from '@mui/icons-material';
 import {
   Divider,
@@ -28,6 +29,14 @@ export const AdminActionsOnSideBar = () => {
     <>
       <Divider />
       <ListSubheader>Admin Panel</ListSubheader>
+      <ListItem sx={{ cursor: 'pointer' }}>
+        <ListItemIcon>
+          <DashboardOutlined />
+        </ListItemIcon>
+        <Button onClick={() => navigateTo('/dashboard')} sx={{ padding: 0 }}>
+          <ListItemText primary={'Dashboard'} sx={{ textAlign: 'left' }} />
+        </Button>
+      </ListItem>
       <ListItem sx={{ cursor: 'pointer' }}>
         <ListItemIcon>
           <CategoryOutlined />

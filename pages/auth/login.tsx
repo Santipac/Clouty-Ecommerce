@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
-import { getSession, signIn, getProviders } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import { validations } from '@/utils';

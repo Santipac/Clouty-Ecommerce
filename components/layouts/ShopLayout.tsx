@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { CustomerExperience } from '../experience';
 import { Hero, Navbar, SideMenu } from '../ui';
 
 interface Props {
@@ -34,6 +35,7 @@ export const ShopLayout: React.FC<Props> = ({
       {router.pathname === '/' ? (
         <Box py={4} px={2}>
           <Hero />
+          {/* <CustomerExperience /> */}
         </Box>
       ) : null}
       <main

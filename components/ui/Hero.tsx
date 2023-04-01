@@ -7,7 +7,7 @@ export const Hero: React.FC = () => {
     <Box
       mt={4}
       minHeight="70vh"
-      borderRadius="3rem"
+      borderRadius="1rem"
       sx={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url(${HeroImage.src})`,
         backgroundPosition: 'center',
@@ -18,7 +18,14 @@ export const Hero: React.FC = () => {
       alignItems="center"
       flexDirection="column"
     >
-      <Typography variant="h3" component="h1" color="white" fontWeight="bold">
+      <Typography
+        variant="h3"
+        component="h1"
+        color="white"
+        fontWeight="bold"
+        textAlign="center"
+        sx={{ fontSize: '2rem' }}
+      >
         Fashion without the hassle.
       </Typography>
       <Button size="medium" color="primary" sx={{ mt: 3 }}>

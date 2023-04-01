@@ -33,7 +33,7 @@ export const AdminActionsOnSideBar = () => {
         <ListItemIcon>
           <DashboardOutlined />
         </ListItemIcon>
-        <Button onClick={() => navigateTo('/dashboard')} sx={{ padding: 0 }}>
+        <Button onClick={() => navigateTo('/admin')} sx={{ padding: 0 }}>
           <ListItemText primary={'Dashboard'} sx={{ textAlign: 'left' }} />
         </Button>
       </ListItem>

@@ -1,5 +1,7 @@
+import React, { useContext, useState } from 'react';
 import { CartContext, UiContext } from '@/context';
 import {
+  AccountCircleOutlined,
   ClearOutlined,
   SearchOutlined,
   ShoppingBagOutlined,
@@ -18,8 +20,7 @@ import {
 } from '@mui/material';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
-
+import { AiOutlineShopping } from 'react-icons/ai';
 export const Navbar = () => {
   const router = useRouter();
   const { toggleSideMenu } = useContext(UiContext);
@@ -123,7 +124,7 @@ export const Navbar = () => {
                 }}
                 className="fadeIn"
               >
-                <SearchOutlined />
+                <SearchOutlined sx={{ fontSize: '1.7rem' }} />
               </IconButton>
             )}
 
@@ -140,12 +141,14 @@ export const Navbar = () => {
                     badgeContent={numberOfItems > 9 ? '+9' : numberOfItems}
                     color="secondary"
                   >
-                    <ShoppingBagOutlined />
+                    <AiOutlineShopping size="1.7rem" />
                   </Badge>
                 </IconButton>
               </Link>
             </NextLink>
-            <Button onClick={toggleSideMenu}>Menu</Button>
+            <IconButton onClick={toggleSideMenu}>
+              <AccountCircleOutlined sx={{ fontSize: '1.7rem' }} />
+            </IconButton>
           </Box>
         </Box>
       </Toolbar>

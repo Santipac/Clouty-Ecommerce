@@ -1,23 +1,46 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-
+import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 // This function can be marked `async` if using `await` inside
-export async function middleware(req: NextRequest) {
-  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!session) {
-    const requestedPage = req.nextUrl.pathname;
-    const url = req.nextUrl.clone();
-    const loginPage = '/auth/login';
-    url.pathname = loginPage;
-    url.search = `page=${requestedPage}`;
+export default withAuth(async function middleware(req: NextRequestWithAuth) {
+  const session: any = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const validRoles = ['admin'];
 
-    return NextResponse.redirect(new URL(url));
+  const requestedPage = req.nextUrl.pathname;
+
+  if (requestedPage.startsWith('/checkout')) {
+    if (!session) {
+      const url = req.nextUrl.clone();
+      const loginPage = '/auth/login';
+      url.pathname = loginPage;
+      url.search = `page=${requestedPage}`;
+
+      return NextResponse.redirect(new URL(url));
+    }
   }
-  return NextResponse.next();
-}
 
+  const { role } = req.nextauth.token?.user as any;
+
+  if (requestedPage.includes('/api/admin') && !validRoles.includes(role)) {
+    return new Response(JSON.stringify({ message: 'Unauthorized' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  if (requestedPage.includes('/admin') && !validRoles.includes(role)) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  return NextResponse.next();
+});
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: '/checkout/:path*',
+  matcher: ['/checkout/:path*', '/admin/:path*', '/api/admin/:path*'],
 };

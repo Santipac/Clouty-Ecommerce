@@ -57,7 +57,7 @@ export const AdminActionsOnSideBar = () => {
         <ListItemIcon>
           <AdminPanelSettings />
         </ListItemIcon>
-        <Button onClick={() => navigateTo('/user/')} sx={{ padding: 0 }}>
+        <Button onClick={() => navigateTo('/admin/users')} sx={{ padding: 0 }}>
           <ListItemText primary={'Users'} sx={{ textAlign: 'left' }} />
         </Button>
       </ListItem>

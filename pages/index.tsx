@@ -41,8 +41,8 @@ export default function Home() {
           variant="h5"
           component="h2"
           textAlign="center"
-          maxWidth="55%"
           lineHeight={2}
+          fontSize={{ xs: '1rem', sm: '1.6rem' }}
         >
           Clouty is a clothing ecommerce developed by{' '}
           <strong>

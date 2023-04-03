@@ -1,4 +1,5 @@
 export * from './AdminActionsOnSideBar';
+export * from './BenefitsGrid';
 export * from './FullScreenLoading';
 export * from './Hero';
 export * from './ItemCounter';

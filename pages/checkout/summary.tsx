@@ -53,13 +53,19 @@ const SummaryPage = () => {
       <Typography variant="h1" component="h1">
         Order Summary
       </Typography>
-      <Grid container>
+      <Grid container sx={{ mt: 4 }}>
         <Grid item xs={12} sm={7}>
           {/*  CardList */}
           <CartList editable />
         </Grid>
         <Grid item xs={12} sm={5}>
-          <Card className="summary-card">
+          <Card
+            className="summary-card"
+            sx={{
+              borderRadius: '2px',
+              boxShadow: 'none',
+            }}
+          >
             <CardContent>
               <Typography variant="h2">Summary</Typography>
               <Divider sx={{ my: 1 }} />

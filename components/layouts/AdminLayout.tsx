@@ -38,7 +38,13 @@ export const AdminLayout: React.FC<Props> = ({
         style={{ margin: '80px auto', maxWidth: '1440px', padding: '0px 30px' }}
       >
         <Box display="flex" flexDirection="column">
-          <Typography variant="h1" component="h1">
+          <Typography
+            variant="h1"
+            component="h1"
+            display="flex"
+            alignItems="center"
+            gap={1}
+          >
             {icon}
             {title}
           </Typography>

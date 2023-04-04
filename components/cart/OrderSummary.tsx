@@ -14,7 +14,7 @@ export const OrderSummary: React.FC<Props> = ({ order }) => {
   const infoToShow = order ? order : cart;
 
   return (
-    <Grid container>
+    <Grid container sx={{ boxShadow: 'none' }}>
       <Grid item xs={6}>
         <Typography>Products</Typography>
       </Grid>

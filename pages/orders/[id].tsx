@@ -77,12 +77,18 @@ const OrderPage: NextPage<Props> = ({ order }) => {
         />
       )}
 
-      <Grid container className="fadeIn">
+      <Grid container className="fadeIn" sx={{ mt: 4 }}>
         <Grid item xs={12} sm={7}>
           <CartList products={order.orderItems} />
         </Grid>
         <Grid item xs={12} sm={5}>
-          <Card className="summary-card">
+          <Card
+            className="summary-card"
+            sx={{
+              borderRadius: '2px',
+              boxShadow: 'none',
+            }}
+          >
             <CardContent>
               <Typography variant="h2">Summary</Typography>
               <Divider sx={{ my: 1 }} />

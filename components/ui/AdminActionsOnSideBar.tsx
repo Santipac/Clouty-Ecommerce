@@ -49,7 +49,7 @@ export const AdminActionsOnSideBar = () => {
         <ListItemIcon>
           <ConfirmationNumberOutlined />
         </ListItemIcon>
-        <Button onClick={() => navigateTo('/orders')} sx={{ padding: 0 }}>
+        <Button onClick={() => navigateTo('/admin/orders')} sx={{ padding: 0 }}>
           <ListItemText primary={'Orders'} sx={{ textAlign: 'left' }} />
         </Button>
       </ListItem>

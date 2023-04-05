@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { AdminLayout } from '../../../components/layouts';
 import { IGender, IProduct, ISize, IType } from '../../../interfaces';
@@ -30,12 +30,15 @@ import {
   TextField,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { Toaster, toast } from 'react-hot-toast';
+import { CloutyApi } from '@/api';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
 const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
 interface FormData {
+  _id?: string;
   description: string;
   images: string[];
   inStock: number;
@@ -55,13 +58,33 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const [newTagValue, setNewTagValue] = useState('');
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     getValues,
     setValue,
+    watch,
   } = useForm<FormData>({ defaultValues: product });
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'title') {
+        const newSlug =
+          value.title
+            ?.trim()
+            .replaceAll(' ', '_')
+            .replaceAll("'", '')
+            .toLocaleLowerCase() || '';
+        setValue('slug', newSlug);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
+
   const onChangeSizes = (size: ISize) => {
     const currentSizes = getValues('sizes');
     if (currentSizes.includes(size)) {
@@ -73,10 +96,41 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
     setValue('sizes', [...currentSizes, size], { shouldValidate: true });
   };
-  const onDeleteTag = (tag: string) => {};
-  const onFormSubmit = (form: FormData) => {
-    console.log({ form });
+
+  const onNewTag = () => {
+    const newTag = newTagValue.trim().toLocaleLowerCase();
+    setNewTagValue('');
+    const currentTags = getValues('tags');
+    if (currentTags.includes(newTag)) return;
+    currentTags.push(newTag);
   };
+  const onDeleteTag = (tag: string) => {
+    const updatedTags = getValues('tags').filter(t => t !== tag);
+    setValue('tags', updatedTags, { shouldValidate: true });
+  };
+
+  const onFormSubmit = async (form: FormData) => {
+    if (form.images.length < 2) {
+      return toast.error('You have to upload 2 images at least.');
+    }
+    setIsSaving(true);
+    try {
+      const { data } = await CloutyApi({
+        url: '/admin/products',
+        method: 'PUT',
+        data: form,
+      });
+      console.log({ data });
+      if (!form._id) {
+      } else {
+        setIsSaving(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsSaving(false);
+    }
+  };
+
   return (
     <AdminLayout
       pageDescription="Page for CRUD a Product"
@@ -84,15 +138,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       subTitle={`Editando: ${product.title}`}
       icon={<DriveFileRenameOutline />}
     >
+      <Toaster />
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
             color="secondary"
             startIcon={<SaveOutlined />}
-            sx={{ width: '150px' }}
+            sx={{
+              width: '150px',
+              cursor: isSaving ? 'not-allowed' : 'pointer',
+            }}
             type="submit"
+            disabled={isSaving}
           >
-            Guardar
+            Save
           </Button>
         </Box>
 
@@ -100,7 +159,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           {/* Data */}
           <Grid item xs={12} sm={6}>
             <TextField
-              label="Título"
+              label="Title"
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
@@ -113,7 +172,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             />
 
             <TextField
-              label="Descripción"
+              label="Description"
               variant="filled"
               fullWidth
               multiline
@@ -127,7 +186,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             />
 
             <TextField
-              label="Inventario"
+              label="InStock"
               type="number"
               variant="filled"
               fullWidth
@@ -141,7 +200,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             />
 
             <TextField
-              label="Precio"
+              label="Price"
               type="number"
               variant="filled"
               fullWidth
@@ -157,7 +216,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <Divider sx={{ my: 1 }} />
 
             <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Tipo</FormLabel>
+              <FormLabel>Type</FormLabel>
               <RadioGroup
                 row
                 value={getValues('type')}
@@ -179,7 +238,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormControl>
 
             <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Género</FormLabel>
+              <FormLabel>Gender</FormLabel>
               <RadioGroup
                 row
                 value={getValues('gender')}
@@ -201,7 +260,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormControl>
 
             <FormGroup>
-              <FormLabel>Tallas</FormLabel>
+              <FormLabel>Sizes</FormLabel>
               {validSizes.map(size => (
                 <FormControlLabel
                   key={size}
@@ -236,11 +295,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             />
 
             <TextField
-              label="Etiquetas"
+              label="Tags"
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
-              helperText="Presiona [spacebar] para agregar"
+              helperText="Press [spacebar] to add"
+              value={newTagValue}
+              onChange={({ target }) => setNewTagValue(target.value)}
+              onKeyDown={({ code }) =>
+                code === 'Space' ? onNewTag() : undefined
+              }
             />
 
             <Box
@@ -253,7 +317,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               }}
               component="ul"
             >
-              {product.tags.map(tag => {
+              {getValues('tags').map(tag => {
                 return (
                   <Chip
                     key={tag}
@@ -270,18 +334,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <Divider sx={{ my: 2 }} />
 
             <Box display="flex" flexDirection="column">
-              <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
+              <FormLabel sx={{ mb: 1 }}>Images</FormLabel>
               <Button
                 color="secondary"
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
               >
-                Cargar imagen
+                Choose Image
               </Button>
 
               <Chip
-                label="Es necesario al 2 imagenes"
+                label="You must have 2 images"
                 color="error"
                 variant="outlined"
               />
@@ -298,7 +362,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       />
                       <CardActions>
                         <Button fullWidth color="error">
-                          Borrar
+                          Delete
                         </Button>
                       </CardActions>
                     </Card>

@@ -14,7 +14,7 @@ export const AdminNavbar = () => {
         <NextLink href="/" passHref legacyBehavior>
           <Link display="flex" alignItems="center">
             <Typography variant="h6">Clouty |</Typography>
-            <Typography sx={{ ml: 0.5 }}>Shop</Typography>
+            <Typography sx={{ ml: 0.5, mt: 0.5 }}>Shop</Typography>
           </Link>
         </NextLink>
         <Box flex={1} />

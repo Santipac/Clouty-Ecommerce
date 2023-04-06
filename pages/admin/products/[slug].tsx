@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef, ChangeEvent } from 'react';
 import { GetServerSideProps } from 'next';
 import { AdminLayout } from '../../../components/layouts';
 import { IGender, IProduct, ISize, IType } from '../../../interfaces';
@@ -32,6 +32,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { Toaster, toast } from 'react-hot-toast';
 import { CloutyApi } from '@/api';
+import { Product } from '@/models';
+import { useRouter } from 'next/router';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -58,6 +60,8 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [newTagValue, setNewTagValue] = useState('');
   const {
@@ -109,6 +113,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
+  const onFileSelected = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (!target.files || target.files.length === 0) return;
+    try {
+      for (const file of target.files) {
+        const formData = new FormData();
+        console.log(file);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onFormSubmit = async (form: FormData) => {
     if (form.images.length < 2) {
       return toast.error('You have to upload 2 images at least.');
@@ -117,11 +133,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     try {
       const { data } = await CloutyApi({
         url: '/admin/products',
-        method: 'PUT',
+        method: form._id ? 'PUT' : 'POST',
         data: form,
       });
       console.log({ data });
       if (!form._id) {
+        router.replace(`/admin/products/${form.slug}`);
       } else {
         setIsSaving(false);
       }
@@ -340,9 +357,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Choose Image
               </Button>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/png, image/gif, image/jpeg"
+                style={{ display: 'none' }}
+                onChange={onFileSelected}
+              />
 
               <Chip
                 label="You must have 2 images"
@@ -383,7 +410,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { slug = '' } = query;
 
-  const product = await dbProducts.getProductBySlug(slug.toString());
+  let product: IProduct | null;
+
+  if (slug === 'new') {
+    const tempProduct = JSON.parse(JSON.stringify(new Product()));
+    delete tempProduct._id;
+    tempProduct.images = ['img1.jpg', 'img2.jpg'];
+    product = tempProduct;
+  } else {
+    product = await dbProducts.getProductBySlug(slug.toString());
+  }
 
   if (!product) {
     return {

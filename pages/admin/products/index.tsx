@@ -4,10 +4,11 @@ import useSWR from 'swr';
 import { AdminLayout } from '@/components/layouts';
 import { IProduct } from '@/interfaces';
 import {
+  AddOutlined,
   CategoryOutlined,
   ConfirmationNumberOutlined,
 } from '@mui/icons-material';
-import { CardMedia, Grid, Link, Typography } from '@mui/material';
+import { Box, Button, CardMedia, Grid, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 const columns: GridColDef[] = [
@@ -84,6 +85,15 @@ const ProductsPage = () => {
       pageDescription="Products administration for admins of Clouty Store"
       icon={<CategoryOutlined />}
     >
+      <Box display="flex" justifyContent="end" sx={{ mb: 2 }}>
+        <Button
+          startIcon={<AddOutlined />}
+          color="secondary"
+          href="/admin/products/new"
+        >
+          Create Product
+        </Button>
+      </Box>
       <Grid container className="fadeIn">
         <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
           <DataGrid

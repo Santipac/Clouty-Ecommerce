@@ -10,9 +10,35 @@ import { getSession } from 'next-auth/react';
 import { dbOrders } from '@/database';
 import { IOrder } from '@/interfaces';
 
+function convertDateAndHour(date: string) {
+  // Crea una nueva instancia de Date con la fecha y hora proporcionada
+  const fecha = new Date(date);
+
+  // Extrae los componentes de la fecha y hora
+  const dia = fecha.getUTCDate();
+  const mes = fecha.getUTCMonth() + 1;
+  const anio = fecha.getUTCFullYear();
+  const horas = fecha.getUTCHours();
+  const minutos = fecha.getUTCMinutes();
+  const segundos = fecha.getUTCSeconds();
+
+  // Formatea la fecha y hora en el formato deseado
+  const fechaFormateada = `${dia.toString().padStart(2, '0')}/${mes
+    .toString()
+    .padStart(2, '0')}/${anio.toString()} ${horas
+    .toString()
+    .padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos
+    .toString()
+    .padStart(2, '0')}`;
+
+  // Retorna la fecha y hora formateada
+  return fechaFormateada;
+}
+
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 100 },
-  { field: 'fullName', headerName: 'Full Name', width: 300 },
+  { field: 'id', headerName: 'ID' },
+  { field: 'products', headerName: 'Products', width: 150 },
+  { field: 'total', headerName: 'Order Total', width: 150 },
 
   {
     field: 'paid',
@@ -26,6 +52,7 @@ const columns: GridColDef[] = [
       );
     },
   },
+  { field: 'createdAt', headerName: 'Order created at', width: 300 },
   {
     field: 'orders',
     headerName: 'View Order',
@@ -55,14 +82,16 @@ const HistoryOrdersPage: NextPage<Props> = ({ orders }) => {
   const rows = orders.map((order, index) => {
     return {
       id: index,
-      fullName: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
+      products: order.numberOfItems,
+      total: `$${order.total}`,
       paid: order.isPaid,
       orderId: order._id,
+      createdAt: convertDateAndHour(order.createdAt!),
     };
   });
   return (
     <ShopLayout title="Order History" pageDescription="Customer order history">
-      <Typography variant="h1" component="h1">
+      <Typography variant="h1" component="h1" sx={{ my: 2 }}>
         Order History
       </Typography>
       <Grid container className="fadeIn">

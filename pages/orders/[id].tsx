@@ -55,9 +55,14 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       title="Order Summary 123B43"
       pageDescription={'Summary of the order'}
     >
-      <Typography variant="h1" component="h1">
-        Order: {order._id}
-      </Typography>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Typography variant="h1" component="h1">
+          Order:
+        </Typography>
+        <Typography variant="h2" component="h2" sx={{ mt: 1 }}>
+          {order._id}
+        </Typography>
+      </Box>
 
       {order.isPaid ? (
         <Chip

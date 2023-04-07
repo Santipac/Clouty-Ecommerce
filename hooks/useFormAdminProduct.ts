@@ -1,10 +1,9 @@
 import React, { ChangeEvent, useState } from 'react';
 import { CloutyApi } from '@/api';
-import { ISize } from '@/interfaces';
+import { FormData, ISize } from '@/interfaces';
 import router, { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-import { FormData } from '@/pages/admin/products/[slug]';
 
 export const useFormAdminProduct = (
   setValue: UseFormSetValue<FormData>,
@@ -78,9 +77,10 @@ export const useFormAdminProduct = (
       });
       console.log({ data });
       if (!form._id) {
-        router.replace(`/admin/products/${form.slug}`);
+        router.replace(`/admin/products`);
       } else {
         setIsSaving(false);
+        router.replace(`/admin/products`);
       }
     } catch (error) {
       console.log(error);

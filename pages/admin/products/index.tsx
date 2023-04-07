@@ -85,7 +85,12 @@ const ProductsPage = () => {
       pageDescription="Products administration for admins of Clouty Store"
       icon={<CategoryOutlined />}
     >
-      <Box display="flex" justifyContent="end" sx={{ mb: 2 }}>
+      <Box
+        display="flex"
+        justifyContent="end"
+        sx={{ mb: 2 }}
+        className="fadeIn"
+      >
         <Button
           startIcon={<AddOutlined />}
           color="secondary"
@@ -94,7 +99,7 @@ const ProductsPage = () => {
           Create Product
         </Button>
       </Box>
-      <Grid container className="fadeIn">
+      <Grid container>
         <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
           <DataGrid
             rows={rows}

@@ -1,8 +1,10 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@/database';
 import { IProduct } from '@/interfaces';
 import { Product } from '@/models';
 import { isValidObjectId } from 'mongoose';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config(process.env.CLOUDINARY_URL || '');
 type Data = { message: string } | IProduct[] | IProduct;
 export default function handler(
   req: NextApiRequest,
@@ -25,7 +27,16 @@ async function getProducts(req: NextApiRequest, res: NextApiResponse<Data>) {
   const products = await Product.find().sort({ title: 'asc' }).lean();
   await db.disconnect();
 
-  res.status(200).json(products);
+  const updatedProducts = products.map(product => {
+    product.images = product.images.map(image => {
+      return image.includes('http')
+        ? image
+        : `${process.env.HOST_NAME}products/${image}`;
+    });
+    return product;
+  });
+
+  res.status(200).json(updatedProducts);
 }
 
 async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
@@ -47,6 +58,16 @@ async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
         .status(400)
         .json({ message: 'Does not exists any product with that ID.' });
     }
+
+    product.images.forEach(async image => {
+      if (!images.includes(image)) {
+        const [fileId, extension] = image
+          .substring(image.lastIndexOf('/') + 1)
+          .split('.');
+        await cloudinary.uploader.destroy(fileId);
+      }
+    });
+
     await product.updateOne(req.body);
     await db.disconnect();
     return res.status(200).json(product);

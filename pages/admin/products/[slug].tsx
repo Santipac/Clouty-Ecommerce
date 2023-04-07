@@ -34,6 +34,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { CloutyApi } from '@/api';
 import { Product } from '@/models';
 import { useRouter } from 'next/router';
+import { trusted } from 'mongoose';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -60,7 +61,6 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [newTagValue, setNewTagValue] = useState('');
@@ -113,16 +113,31 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
-  const onFileSelected = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const onFileSelected = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (!target.files || target.files.length === 0) return;
     try {
       for (const file of target.files) {
         const formData = new FormData();
-        console.log(file);
+        formData.append('file', file);
+        const { data } = await CloutyApi.post<{ message: string }>(
+          '/admin/upload',
+          formData
+        );
+        setValue('images', [...getValues('images'), data.message], {
+          shouldValidate: true,
+        });
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onDeleteImage = (image: string) => {
+    setValue(
+      'images',
+      getValues('images').filter(img => img !== image),
+      { shouldValidate: true }
+    );
   };
 
   const onFormSubmit = async (form: FormData) => {
@@ -357,13 +372,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
-                onClick={() => fileInputRef.current?.click()}
+                component="label"
               >
                 Choose Image
+                <input
+                  hidden
+                  type="file"
+                  multiple
+                  accept="image/png, image/gif, image/jpeg"
+                  style={{ display: 'none' }}
+                  onChange={onFileSelected}
+                />
               </Button>
 
               <input
-                ref={fileInputRef}
+                hidden
                 type="file"
                 multiple
                 accept="image/png, image/gif, image/jpeg"
@@ -375,20 +398,27 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 label="You must have 2 images"
                 color="error"
                 variant="outlined"
+                sx={{
+                  display: getValues('images').length < 2 ? 'flex' : 'none',
+                }}
               />
 
               <Grid container spacing={2}>
-                {product.images.map(img => (
+                {getValues('images').map(img => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
                         component="img"
                         className="fadeIn"
-                        image={`/products/${img}`}
+                        image={img}
                         alt={img}
                       />
                       <CardActions>
-                        <Button fullWidth color="error">
+                        <Button
+                          fullWidth
+                          color="error"
+                          onClick={() => onDeleteImage(img)}
+                        >
                           Delete
                         </Button>
                       </CardActions>

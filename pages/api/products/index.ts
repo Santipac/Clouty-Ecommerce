@@ -15,16 +15,27 @@ export default async function handler(
   }
 }
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { gender = 'all' } = req.query;
+  const { gender = 'all', type = 'all', price = 'default' } = req.query;
   let condition = {};
   if (gender !== 'all' && SHOP_CONSTANTS.validGenders.includes(`${gender}`)) {
     condition = { gender };
   }
+  if (type !== 'all') {
+    condition = { ...condition, type };
+  }
+
   await db.connect();
   const products = await Product.find(condition)
     .select('title images price inStock slug -_id')
     .lean();
   await db.disconnect();
+
+  if (price !== 'default') {
+    price === 'cheap'
+      ? products.sort((a, b) => a.price - b.price)
+      : products.sort((a, b) => b.price - a.price);
+  }
+
   const updatedProducts = products.map(product => {
     product.images = product.images.map(image => {
       return image.includes('http')

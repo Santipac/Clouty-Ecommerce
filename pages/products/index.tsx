@@ -1,22 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShopLayout } from '@/components/layouts';
-import { ProductList } from '@/components/products';
+import { ProductList, ProductsFiltersDrawer } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
 import { useProducts } from '@/hooks';
-import { Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 
 const ProductsPage = () => {
   const { products, error, isLoading } = useProducts('/products');
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false);
 
+  const handleFilterMenu = () => {
+    setFilterMenuOpen(!filterMenuOpen);
+  };
   return (
     <ShopLayout
       title="Clouty Shop | All Products"
       pageDescription="All products of Clouty for shopping"
     >
-      <Typography variant="h2" component="h2" sx={{ mb: 1 }}>
-        All Products
-      </Typography>
-      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
+      {isLoading ? (
+        <FullScreenLoading />
+      ) : (
+        <Box display="flex" flexDirection="column">
+          <Button
+            color="primary"
+            variant="contained"
+            sx={{
+              mb: 2,
+              width: 'min-content',
+              fontSize: '1rem',
+            }}
+            onClick={() => handleFilterMenu()}
+          >
+            Filters
+          </Button>
+
+          <ProductsFiltersDrawer
+            filterMenuOpen={filterMenuOpen}
+            handleFilterMenu={handleFilterMenu}
+          />
+          <ProductList products={products} />
+        </Box>
+      )}
     </ShopLayout>
   );
 };

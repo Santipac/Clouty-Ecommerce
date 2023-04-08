@@ -19,7 +19,7 @@ const ProductsPage = () => {
   const [price, setPrice] = useState('default');
 
   let { products, error, isLoading } = useProducts(
-    `/products?gender=${category}&type=${type}&price=${price}`
+    `/productss?gender=${category}&type=${type}&price=${price}`
   );
   const maxPrice = products.reduce((precioActual, producto) => {
     return producto.price > precioActual ? producto.price : precioActual;
@@ -33,9 +33,21 @@ const ProductsPage = () => {
         title="Clouty Shop | All Products"
         pageDescription="All products of Clouty for shopping"
       >
-        <Typography variant="h1" component="h1">
-          Something went wrong... Try Again refreshing this page
-        </Typography>
+        <Box
+          height="90vh"
+          width="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Typography variant="h1" component="h1">
+            Something went wrong...
+          </Typography>
+          <Typography variant="subtitle2" component="h2">
+            Try Again refreshing this page
+          </Typography>
+        </Box>
       </ShopLayout>
     );
   }

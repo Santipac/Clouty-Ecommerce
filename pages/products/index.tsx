@@ -19,7 +19,7 @@ const ProductsPage = () => {
   const [price, setPrice] = useState('default');
 
   let { products, error, isLoading } = useProducts(
-    `/productss?gender=${category}&type=${type}&price=${price}`
+    `/products?gender=${category}&type=${type}&price=${price}`
   );
   const maxPrice = products.reduce((precioActual, producto) => {
     return producto.price > precioActual ? producto.price : precioActual;

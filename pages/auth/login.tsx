@@ -24,6 +24,7 @@ type FormData = {
   email: string;
   password: string;
 };
+
 const LoginPage = () => {
   const router = useRouter();
   const {
@@ -50,11 +51,21 @@ const LoginPage = () => {
   return (
     <AuthLayout title="Login">
       <form onSubmit={handleSubmit(onLoginUser)} noValidate>
-        <Box sx={{ width: 350, padding: '10px, 20px' }}>
+        <Box
+          sx={{ maxWidth: 420, paddingY: '4rem', paddingX: '2rem' }}
+          bgcolor="#fff"
+          boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+          borderRadius="1rem"
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h1" component="h1">
-                Login
+              <Typography
+                variant="h1"
+                component="h1"
+                textAlign="center"
+                sx={{ mb: 4 }}
+              >
+                Log in
               </Typography>
               <Chip
                 label="This user is not recognized."
@@ -68,7 +79,7 @@ const LoginPage = () => {
               <TextField
                 type="email"
                 label="Email"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('email', {
                   required: 'This field is required',
@@ -82,7 +93,7 @@ const LoginPage = () => {
               <TextField
                 label="Password"
                 type="password"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('password', {
                   required: 'This field is required',
@@ -99,9 +110,9 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 color="secondary"
-                className="circular-btn"
                 size="large"
                 fullWidth
+                sx={{ ':hover': { backgroundColor: '#3658bd' } }}
               >
                 Sign in
               </Button>
@@ -126,7 +137,6 @@ const LoginPage = () => {
             <Grid item xs={12}>
               <Button
                 type="submit"
-                className="circular-btn"
                 size="large"
                 fullWidth
                 onClick={() => signIn('google')}
@@ -139,11 +149,11 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 color="primary"
-                className="circular-btn"
+                variant="contained"
                 size="large"
                 fullWidth
                 onClick={() => signIn('github')}
-                sx={{ gap: 2 }}
+                sx={{ gap: 2, ':hover': { backgroundColor: '#000' } }}
               >
                 <BsGithub size="25px" /> Sign in with Github
               </Button>

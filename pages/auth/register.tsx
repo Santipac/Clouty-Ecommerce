@@ -52,10 +52,15 @@ const RegisterPage = () => {
   return (
     <AuthLayout title="Register">
       <form onSubmit={handleSubmit(onRegisterUser)} noValidate>
-        <Box sx={{ width: 350, padding: '10px, 20px' }}>
+        <Box
+          sx={{ width: 420, paddingY: '4rem', paddingX: '2rem' }}
+          bgcolor="#fff"
+          boxShadow="rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+          borderRadius="1rem"
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h1" component="h1">
+              <Typography variant="h1" component="h1" textAlign="center">
                 Create Account
               </Typography>
               <Chip
@@ -70,7 +75,7 @@ const RegisterPage = () => {
               <TextField
                 label="Name"
                 type="text"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('name', {
                   required: 'This field is required',
@@ -86,7 +91,7 @@ const RegisterPage = () => {
             <Grid item xs={12}>
               <TextField
                 label="Email"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('email', {
                   required: 'This field is required',
@@ -100,7 +105,7 @@ const RegisterPage = () => {
               <TextField
                 label="Password"
                 type="password"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('password', {
                   required: 'This field is required',
@@ -113,7 +118,7 @@ const RegisterPage = () => {
               <Button
                 type="submit"
                 color="secondary"
-                className="circular-btn"
+                sx={{ ':hover': { backgroundColor: '#3658bd' } }}
                 size="large"
                 fullWidth
               >

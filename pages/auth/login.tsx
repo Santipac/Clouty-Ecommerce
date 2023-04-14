@@ -136,7 +136,6 @@ const LoginPage = () => {
             </Grid>
             <Grid item xs={12}>
               <Button
-                type="submit"
                 size="large"
                 fullWidth
                 onClick={() => signIn('google')}
@@ -147,7 +146,6 @@ const LoginPage = () => {
             </Grid>
             <Grid item xs={12}>
               <Button
-                type="submit"
                 color="primary"
                 variant="contained"
                 size="large"

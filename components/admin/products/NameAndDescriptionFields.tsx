@@ -16,9 +16,9 @@ export const NameAndDescriptionFields: React.FC<Props> = ({
     <>
       <TextField
         label="Title"
-        variant="filled"
+        variant="outlined"
         fullWidth
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         {...register('title', {
           required: 'This field is required',
           minLength: { value: 2, message: 'Min 2 characters' },
@@ -29,10 +29,10 @@ export const NameAndDescriptionFields: React.FC<Props> = ({
 
       <TextField
         label="Description"
-        variant="filled"
+        variant="outlined"
         fullWidth
         multiline
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         {...register('description', {
           required: 'This field is required',
           minLength: { value: 2, message: 'Min 2 characters' },

@@ -13,9 +13,9 @@ export const StockAndPriceFields: React.FC<Props> = ({ register, errors }) => {
       <TextField
         label="InStock"
         type="number"
-        variant="filled"
+        variant="outlined"
         fullWidth
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         {...register('inStock', {
           required: 'This field is required',
           min: { value: 1, message: 'The Minimum value is 1' },
@@ -27,9 +27,9 @@ export const StockAndPriceFields: React.FC<Props> = ({ register, errors }) => {
       <TextField
         label="Price"
         type="number"
-        variant="filled"
+        variant="outlined"
         fullWidth
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         {...register('price', {
           required: 'This field is required',
           min: { value: 1, message: 'The Minimum value is 1' },

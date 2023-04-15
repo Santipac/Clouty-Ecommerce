@@ -8,7 +8,7 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
-  const validRoles = ['admin'];
+  const validRoles = ['admin', 'SEO'];
 
   const requestedPage = req.nextUrl.pathname;
 
@@ -36,6 +36,12 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
 
   if (requestedPage.includes('/admin') && !validRoles.includes(role)) {
     return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  if (requestedPage.startsWith('/admin/products/new')) {
+    if (role !== 'SEO') {
+      return NextResponse.redirect(new URL('/admin/products', req.url));
+    }
   }
 
   return NextResponse.next();

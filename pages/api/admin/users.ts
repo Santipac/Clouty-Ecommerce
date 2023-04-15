@@ -32,7 +32,7 @@ const updateUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       .status(400)
       .json({ message: 'Do not exist any user with that ID.' });
   }
-  const validRoles = ['admin', 'client'];
+  const validRoles = ['admin', 'client', 'SEO'];
 
   if (!validRoles.includes(role)) {
     return res.status(400).json({ message: 'Role Unauthorized' });

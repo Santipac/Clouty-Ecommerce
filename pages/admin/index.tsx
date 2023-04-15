@@ -15,6 +15,7 @@ import {
 } from '@mui/icons-material';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { DashboardResponse } from '@/interfaces';
+import { FullScreenLoading } from '@/components/ui';
 
 const DashboardPage = () => {
   const { data, error } = useSWR<DashboardResponse>('/api/admin/dashboard', {
@@ -31,13 +32,7 @@ const DashboardPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (!error && !data) {
-    return (
-      <>
-        <Typography>Loading...</Typography>
-      </>
-    );
-  }
+  if (!data && !error) return <FullScreenLoading />;
 
   if (error) {
     console.log(error);

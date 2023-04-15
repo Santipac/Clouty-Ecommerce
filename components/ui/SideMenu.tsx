@@ -74,22 +74,6 @@ export const SideMenu = () => {
                   }
                 />
               </ListItem>
-
-              <ListItem sx={{ cursor: 'pointer' }}>
-                <ListItemIcon>
-                  <AccountCircleOutlined />
-                </ListItemIcon>
-                <Button
-                  onClick={() => navigateTo('/orders/history')}
-                  sx={{ padding: 0 }}
-                >
-                  <ListItemText
-                    primary={'Profile'}
-                    sx={{ textAlign: 'left' }}
-                  />
-                </Button>
-              </ListItem>
-
               <ListItem sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <ConfirmationNumberOutlined />

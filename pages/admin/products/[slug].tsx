@@ -83,14 +83,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           </Button>
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {/* Data */}
           <Grid item xs={12} sm={6}>
             <NameAndDescriptionFields register={register} errors={errors} />
 
             <StockAndPriceFields register={register} errors={errors} />
-
-            <Divider sx={{ my: 1 }} />
 
             <TypeGenderAndSizesFields
               setValue={setValue}

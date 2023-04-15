@@ -10,6 +10,7 @@ import {
 } from '@mui/icons-material';
 import { Box, Button, CardMedia, Grid, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { FullScreenLoading } from '@/components/ui';
 
 const columns: GridColDef[] = [
   {
@@ -51,8 +52,7 @@ const columns: GridColDef[] = [
 const ProductsPage = () => {
   const { data, error } = useSWR<IProduct[]>('/api/admin/products');
 
-  if (!data && !error)
-    return <Typography variant="subtitle1">Loading...</Typography>;
+  if (!data && !error) return <FullScreenLoading />;
 
   if (!data)
     return (

@@ -61,7 +61,7 @@ export const Navbar = () => {
               </Link>
             </NextLink>
             <NextLink href="/category/women" passHref legacyBehavior>
-              <Link>
+              <Link mx={2}>
                 <Button
                   color={
                     router.pathname === '/category/women' ? 'primary' : 'info'
@@ -85,7 +85,11 @@ export const Navbar = () => {
           </Box>
           <NextLink href="/" passHref legacyBehavior>
             <Link display="flex" alignItems="center">
-              <Typography variant="h4" fontWeight="bold">
+              <Typography
+                variant="h4"
+                fontWeight="bold"
+                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
+              >
                 Clouty&#174;
               </Typography>
             </Link>

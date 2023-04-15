@@ -1,6 +1,6 @@
-import { db } from '@/database';
+import { db, dbProducts } from '@/database';
 import { IPaypal } from '@/interfaces';
-import { Order } from '@/models';
+import { Order, Product } from '@/models';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 type Data = { message: string };
@@ -71,6 +71,7 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   await db.connect();
   const dbOrder = await Order.findById(orderId);
+
   if (!dbOrder) {
     await db.disconnect();
     return res
@@ -87,6 +88,13 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   dbOrder.transactionId = transactionId;
   dbOrder.isPaid = true;
   await dbOrder.save();
+
+  const orderItems = dbOrder.orderItems;
+  orderItems.map(async prod => {
+    const product = await Product.findById(prod._id);
+    product!.inStock -= prod.quantity;
+    await product?.save();
+  });
   await db.disconnect();
   return res.status(200).json({ message: 'Paid Order' });
 };

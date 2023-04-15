@@ -31,9 +31,9 @@ export const TagsFields: React.FC<Props> = ({
     <>
       <TextField
         label="Slug - URL"
-        variant="filled"
+        variant="outlined"
         fullWidth
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         {...register('slug', {
           required: 'This field is required',
           validate: val =>
@@ -45,9 +45,9 @@ export const TagsFields: React.FC<Props> = ({
 
       <TextField
         label="Tags"
-        variant="filled"
+        variant="outlined"
         fullWidth
-        sx={{ mb: 1 }}
+        sx={{ mb: 5 }}
         helperText="Press [spacebar] to add"
         value={newTagValue}
         onChange={({ target }) => setNewTagValue(target.value)}

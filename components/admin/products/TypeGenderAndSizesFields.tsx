@@ -30,7 +30,7 @@ export const TypeGenderAndSizesFields: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <FormControl sx={{ mb: 1 }}>
+      <FormControl sx={{ mb: 2 }}>
         <FormLabel>Type</FormLabel>
         <RadioGroup
           row
@@ -52,7 +52,7 @@ export const TypeGenderAndSizesFields: React.FC<Props> = ({
         </RadioGroup>
       </FormControl>
 
-      <FormControl sx={{ mb: 1 }}>
+      <FormControl sx={{ mb: 2 }}>
         <FormLabel>Gender</FormLabel>
         <RadioGroup
           row

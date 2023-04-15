@@ -67,8 +67,18 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }}
         className="fadeIn"
       >
-        <Typography fontWeight={700}>{product.title}</Typography>
-        <Typography fontWeight={500}>${product.price}</Typography>
+        <Typography
+          fontWeight={700}
+          sx={{ fontSize: { xs: '.8rem', sm: '1rem' } }}
+        >
+          {product.title}
+        </Typography>
+        <Typography
+          fontWeight={500}
+          sx={{ fontSize: { xs: '.8rem', sm: '1rem' } }}
+        >
+          ${product.price}
+        </Typography>
       </Box>
     </Grid>
   );

@@ -4,7 +4,6 @@ import {
   Card,
   CardActionArea,
   CardMedia,
-  Chip,
   Grid,
   Link,
   Typography,
@@ -39,16 +38,21 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           <Link>
             <CardActionArea>
               {product.inStock === 0 ? (
-                <Chip
-                  color="primary"
-                  label="Not available"
+                <Box
+                  p=".5rem"
+                  borderRadius="10px"
                   sx={{
+                    bgcolor: 'black',
                     position: 'absolute',
                     zIndex: 99,
                     top: '10px',
                     left: '10px',
                   }}
-                />
+                >
+                  <Typography textAlign="center" color="white" fontSize=".8rem">
+                    Not Available
+                  </Typography>
+                </Box>
               ) : null}
 
               <CardMedia

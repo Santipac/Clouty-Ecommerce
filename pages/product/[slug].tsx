@@ -4,7 +4,7 @@ import { ShopLayout } from '@/components/layouts';
 import { dbProducts } from '@/database';
 import { ItemCounter } from '@/components/ui';
 import { ProductSlideShow, SizeSelector } from '@/components/products';
-import { Box, Button, Grid, Typography, Chip } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { ICartProduct, IProduct, ISize } from '@/interfaces';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { CartContext } from '@/context';
@@ -70,7 +70,17 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               />
             </Box>
             {product.inStock === 0 ? (
-              <Chip label="Not Available" color="error" variant="outlined" />
+              <Box
+                display="flex"
+                width="100%"
+                p=".3rem"
+                borderRadius="10px"
+                border="1px solid"
+                borderColor="red"
+                justifyContent="center"
+              >
+                <Typography color="error">Not Available</Typography>
+              </Box>
             ) : (
               <Button
                 color="secondary"

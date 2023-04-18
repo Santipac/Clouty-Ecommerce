@@ -12,11 +12,9 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
   CircularProgress,
   Divider,
   Grid,
-  Link,
   Typography,
 } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
@@ -65,21 +63,35 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       </Box>
 
       {order.isPaid ? (
-        <Chip
-          sx={{ my: 2 }}
-          label="Completed"
-          variant="outlined"
-          color="success"
-          icon={<CreditScoreOutlined />}
-        />
+        <Box
+          my={2}
+          display="flex"
+          width="fit-content"
+          p=".5rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="#357a38"
+        >
+          <CreditScoreOutlined color="success" />
+          <Typography color="#357a38" ml={2}>
+            Completed
+          </Typography>
+        </Box>
       ) : (
-        <Chip
-          sx={{ my: 2 }}
-          label="Pay Pending"
-          variant="outlined"
-          color="error"
-          icon={<CreditCardOffOutlined />}
-        />
+        <Box
+          my={2}
+          display="flex"
+          width="fit-content"
+          p=".5rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="red"
+        >
+          <CreditCardOffOutlined color="error" />
+          <Typography color="error" ml={2}>
+            Pay Pending
+          </Typography>
+        </Box>
       )}
 
       <Grid container className="fadeIn" sx={{ mt: 4 }}>
@@ -126,13 +138,21 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                   flexDirection="column"
                 >
                   {order.isPaid ? (
-                    <Chip
-                      sx={{ my: 2 }}
-                      label="Completed"
-                      variant="outlined"
-                      color="success"
-                      icon={<CreditScoreOutlined />}
-                    />
+                    <Box
+                      my={2}
+                      display="flex"
+                      justifyContent="center"
+                      width="100%"
+                      p=".2rem"
+                      borderRadius="10px"
+                      border="1px solid"
+                      borderColor="#357a38"
+                    >
+                      <CreditScoreOutlined color="success" />
+                      <Typography color="#357a38" ml={2}>
+                        Completed
+                      </Typography>
+                    </Box>
                   ) : (
                     <PayPalButtons
                       createOrder={(data, actions) => {

@@ -12,7 +12,6 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
   Divider,
   Grid,
   Typography,
@@ -32,21 +31,35 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       pageDescription={'Summary of the order'}
     >
       {order.isPaid ? (
-        <Chip
-          sx={{ my: 2 }}
-          label="Completed"
-          variant="outlined"
-          color="success"
-          icon={<CreditScoreOutlined />}
-        />
+        <>
+          <Box
+            width="fit-content"
+            display="flex"
+            p=".5rem"
+            borderRadius="10px"
+            border="1px solid"
+            borderColor="#357a38"
+          >
+            <CreditScoreOutlined color="success" />
+            <Typography color="#357a38" ml={2}>
+              Completed
+            </Typography>
+          </Box>
+        </>
       ) : (
-        <Chip
-          sx={{ my: 2 }}
-          label="Pay Pending"
-          variant="outlined"
-          color="error"
-          icon={<CreditCardOffOutlined />}
-        />
+        <Box
+          width="fit-content"
+          display="flex"
+          p=".5rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="red"
+        >
+          <CreditCardOffOutlined color="error" />
+          <Typography color="error" ml={2}>
+            Pay Pending
+          </Typography>
+        </Box>
       )}
 
       <Grid container className="fadeIn">
@@ -76,21 +89,33 @@ const OrderPage: NextPage<Props> = ({ order }) => {
               <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
                 <Box display="flex" flexDirection="column">
                   {order.isPaid ? (
-                    <Chip
-                      sx={{ my: 2 }}
-                      label="Completed"
-                      variant="outlined"
-                      color="success"
-                      icon={<CreditScoreOutlined />}
-                    />
+                    <Box
+                      display="flex"
+                      width="fit-content"
+                      p=".5rem"
+                      borderRadius="10px"
+                      border="1px solid"
+                      borderColor="#357a38"
+                    >
+                      <CreditScoreOutlined color="success" />
+                      <Typography color="#357a38" ml={2}>
+                        Completed
+                      </Typography>
+                    </Box>
                   ) : (
-                    <Chip
-                      sx={{ my: 2 }}
-                      label="Pay Pending"
-                      variant="outlined"
-                      color="error"
-                      icon={<CreditCardOffOutlined />}
-                    />
+                    <Box
+                      display="flex"
+                      width="fit-content"
+                      p=".5rem"
+                      borderRadius="10px"
+                      border="1px solid"
+                      borderColor="red"
+                    >
+                      <CreditCardOffOutlined color="error" />
+                      <Typography color="error" ml={2}>
+                        Pay Pending
+                      </Typography>
+                    </Box>
                   )}
                 </Box>
               </Box>

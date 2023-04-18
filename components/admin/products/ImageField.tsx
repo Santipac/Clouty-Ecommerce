@@ -1,14 +1,14 @@
 import { FormData } from '@/interfaces';
-import { UploadOutlined } from '@mui/icons-material';
+import { ErrorOutlineOutlined, UploadOutlined } from '@mui/icons-material';
 import {
   Box,
   FormLabel,
   Button,
-  Chip,
   Grid,
   Card,
   CardMedia,
   CardActions,
+  Typography,
 } from '@mui/material';
 import React, { ChangeEvent } from 'react';
 import { UseFormGetValues } from 'react-hook-form';
@@ -53,15 +53,19 @@ export const ImageField: React.FC<Props> = ({
         style={{ display: 'none' }}
         onChange={onFileSelected}
       />
-
-      <Chip
-        label="You must have 2 images"
-        color="error"
-        variant="outlined"
+      <Box
+        border="2px solid red"
+        p={1}
+        borderRadius="10px"
         sx={{
           display: getValues('images').length < 2 ? 'flex' : 'none',
         }}
-      />
+      >
+        <ErrorOutlineOutlined color="error" />
+        <Typography color="error" textAlign="center" ml={2}>
+          You must have 2 images
+        </Typography>
+      </Box>
 
       <Grid container spacing={2}>
         {getValues('images').map(img => (

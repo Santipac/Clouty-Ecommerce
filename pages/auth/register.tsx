@@ -1,15 +1,7 @@
 import React, { useContext, useState } from 'react';
 import NextLink from 'next/link';
 import AuthLayout from '@/components/layouts/AuthLayout';
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
 import { validations } from '@/utils';
@@ -63,13 +55,20 @@ const RegisterPage = () => {
               <Typography variant="h1" component="h1" textAlign="center">
                 Create Account
               </Typography>
-              <Chip
-                label="We couldn't create your user"
-                color="error"
-                icon={<ErrorOutline />}
+              <Box
                 className="fadeIn"
                 sx={{ marginTop: 2, display: showError ? 'flex' : 'none' }}
-              />
+                width="fit-content"
+                p=".5rem"
+                borderRadius="10px"
+                border="1px solid"
+                borderColor="red"
+              >
+                <ErrorOutline color="error" />
+                <Typography color="error" ml={2}>
+                  We couldn&apos;t create your user
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <TextField

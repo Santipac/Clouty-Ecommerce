@@ -1,6 +1,6 @@
 import { FormData } from '@/interfaces';
-import { TextField, Box, Chip } from '@mui/material';
-import { errors } from 'jose';
+import { CloseOutlined } from '@mui/icons-material';
+import { TextField, Box, Button } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
 import {
   FieldErrors,
@@ -66,14 +66,16 @@ export const TagsFields: React.FC<Props> = ({
       >
         {getValues('tags').map(tag => {
           return (
-            <Chip
-              key={tag}
-              label={tag}
-              onDelete={() => onDeleteTag(tag)}
+            <Button
+              variant="contained"
               color="primary"
-              size="small"
-              sx={{ ml: 1, mt: 1 }}
-            />
+              key={tag}
+              sx={{ ':hover': { bgcolor: '#000' } }}
+              onClick={() => onDeleteTag(tag)}
+            >
+              {tag}
+              <CloseOutlined sx={{ ml: 2 }} />
+            </Button>
           );
         })}
       </Box>

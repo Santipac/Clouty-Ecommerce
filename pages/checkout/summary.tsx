@@ -1,13 +1,11 @@
 import { CartList, OrderSummary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
 import { CartContext } from '@/context';
-import { countries } from '@/utils';
 import {
   Box,
   Button,
   Card,
   CardContent,
-  Chip,
   Divider,
   Grid,
   Link,
@@ -105,11 +103,17 @@ const SummaryPage = () => {
                 >
                   Confirm Order
                 </Button>
-                <Chip
-                  color="error"
-                  label={errorMessage}
+                <Box
                   sx={{ display: errorMessage ? 'flex' : 'none', mt: 2 }}
-                />
+                  width="100%"
+                  justifyContent="center"
+                  p=".2rem"
+                  borderRadius="10px"
+                  border="1px solid"
+                  borderColor="red"
+                >
+                  <Typography color="error">{errorMessage}</Typography>
+                </Box>
               </Box>
             </CardContent>
           </Card>

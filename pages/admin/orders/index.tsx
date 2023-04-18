@@ -3,8 +3,9 @@ import useSWR from 'swr';
 import { AdminLayout } from '@/components/layouts';
 import { IOrder, IUser } from '@/interfaces';
 import { ConfirmationNumberOutlined } from '@mui/icons-material';
-import { Chip, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { FullScreenLoading } from '@/components/ui';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'Order ID', width: 250 },
@@ -16,9 +17,27 @@ const columns: GridColDef[] = [
     headerName: 'Paid',
     renderCell: ({ row }: GridRenderCellParams) => {
       return row.isPaid ? (
-        <Chip variant="outlined" label="Paid" color="success" />
+        <Box
+          width="fit-content"
+          display="flex"
+          p=".3rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="green"
+        >
+          <Typography color="#357a38">Paid</Typography>
+        </Box>
       ) : (
-        <Chip variant="outlined" label="Pending" color="error" />
+        <Box
+          width="fit-content"
+          display="flex"
+          p=".3rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="red"
+        >
+          <Typography color="error">Pending</Typography>
+        </Box>
       );
     },
     width: 150,
@@ -46,9 +65,7 @@ const columns: GridColDef[] = [
 
 const OrdersPage = () => {
   const { data, error } = useSWR<IOrder[]>('/api/admin/orders');
-
-  if (!data && !error)
-    return <Typography variant="subtitle1">Loading...</Typography>;
+  if (!data && !error) return <FullScreenLoading />;
 
   if (!data)
     return (

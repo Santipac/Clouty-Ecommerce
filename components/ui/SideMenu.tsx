@@ -140,7 +140,8 @@ export const SideMenu = () => {
               </ListItem>
 
               {/* Admin */}
-              {user?.role === 'admin' && <AdminActionsOnSideBar />}
+              {user?.role === 'admin' ||
+                (user?.role === 'SEO' && <AdminActionsOnSideBar />)}
             </>
           ) : (
             <>

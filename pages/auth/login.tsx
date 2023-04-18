@@ -11,7 +11,6 @@ import { BsGithub } from 'react-icons/bs';
 import {
   Box,
   Button,
-  Chip,
   Divider,
   Grid,
   Link,
@@ -67,13 +66,20 @@ const LoginPage = () => {
               >
                 Log in
               </Typography>
-              <Chip
-                label="This user is not recognized."
-                color="error"
-                icon={<ErrorOutline />}
+              <Box
                 className="fadeIn"
                 sx={{ marginTop: 2, display: showError ? 'flex' : 'none' }}
-              />
+                width="fit-content"
+                p=".5rem"
+                borderRadius="10px"
+                border="1px solid"
+                borderColor="red"
+              >
+                <ErrorOutline color="error" />
+                <Typography color="error" ml={2}>
+                  This user is not recognized.
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <TextField

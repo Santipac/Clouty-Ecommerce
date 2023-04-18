@@ -1,9 +1,8 @@
 import { ShopLayout } from '@/components/layouts';
 import NextLink from 'next/link';
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid/models';
-import Chip from '@mui/material/Chip';
+import { GridColDef } from '@mui/x-data-grid/models';
 import Link from '@mui/material/Link';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
@@ -46,9 +45,29 @@ const columns: GridColDef[] = [
     width: 200,
     renderCell: params => {
       return params.row.paid ? (
-        <Chip color="success" label="Payed" variant="outlined" />
+        <Box
+          display="flex"
+          justifyContent="center"
+          width="fit-content"
+          p=".3rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="#357a38"
+        >
+          <Typography color="#357a38">Payed</Typography>
+        </Box>
       ) : (
-        <Chip color="error" label="Not payed" variant="outlined" />
+        <Box
+          display="flex"
+          justifyContent="center"
+          width="fit-content"
+          p=".3rem"
+          borderRadius="10px"
+          border="1px solid"
+          borderColor="red"
+        >
+          <Typography color="error">Pay Pending</Typography>
+        </Box>
       );
     },
   },
